@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Animal Game</title>
+
+<style>
+body {
+    font-family: Arial;
+    text-align: center;
+    background: #d0f0f7;
+}
+
+h1 { margin: 10px; }
+
+#question {
+    font-size: 28px;
+    margin: 15px;
+}
+
+.options {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.options img {
+    width: 200px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 15px;
+    cursor: pointer;
+    border: 5px solid transparent;
+}
+
+.options img:hover {
+    border: 5px solid orange;
+}
+
+#feedback {
+    font-size: 50px;
+    margin-top: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🐾 Animal Game</h1>
+<div id="question"></div>
+<div class="options" id="options"></div>
+<div id="feedback"></div>
+
+<!-- Sounds -->
+<audio id="clap" src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_c6ccf3d5c0.mp3"></audio>
+<audio id="wrong" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_9c1e6a8a44.mp3"></audio>
+
+<script>
+
+const fallback = "https://via.placeholder.com/200?text=Image";
+
+// QUESTIONS EXACTLY AS YOU ASKED
+const questions = [
+
+{
+q: "Identify the Elephant 🐘",
+options: [
+"https://cdn.pixabay.com/photo/2016/11/29/03/53/elephant-1867287_1280.jpg", // elephant
+"https://cdn.pixabay.com/photo/2017/01/20/00/30/lion-1990549_1280.jpg", // lion
+"https://cdn.pixabay.com/photo/2017/01/12/21/42/tiger-1975790_1280.jpg" // tiger
+],
+correct: 0
+},
+
+{
+q: "Identify the Lion 🦁",
+options: [
+"https://cdn.pixabay.com/photo/2016/11/29/09/08/cow-1867924_1280.jpg", // cow
+"https://cdn.pixabay.com/photo/2017/01/20/00/30/lion-1990549_1280.jpg", // lion
+"https://cdn.pixabay.com/photo/2016/03/27/22/22/pig-1284512_1280.jpg" // pig
+],
+correct: 1
+},
+
+{
+q: "Identify the Tiger 🐯",
+options: [
+"https://cdn.pixabay.com/photo/2017/02/15/12/12/zebra-2066474_1280.jpg", // zebra
+"https://cdn.pixabay.com/photo/2017/01/20/00/30/lion-1990549_1280.jpg", // lion
+"https://cdn.pixabay.com/photo/2017/01/12/21/42/tiger-1975790_1280.jpg" // tiger
+],
+correct: 2
+},
+
+{
+q: "Identify the Monkey 🐒",
+options: [
+"https://cdn.pixabay.com/photo/2018/01/07/09/31/monkey-3061033_1280.jpg", // monkey
+"https://cdn.pixabay.com/photo/2016/11/29/09/08/cow-1867924_1280.jpg", // cow
+"https://cdn.pixabay.com/photo/2017/01/20/00/30/lion-1990549_1280.jpg" // lion
+],
+correct: 0
+},
+
+{
+q: "Identify the Zebra 🦓",
+options: [
+"https://cdn.pixabay.com/photo/2017/02/15/12/12/zebra-2066474_1280.jpg", // zebra
+"https://cdn.pixabay.com/photo/2016/03/27/22/22/pig-1284512_1280.jpg", // pig
+"https://cdn.pixabay.com/photo/2016/11/29/09/08/cow-1867924_1280.jpg" // cow
+],
+correct: 0
+}
+
+];
+
+let current = 0;
+
+function loadQuestion() {
+let q = questions[current];
+
+document.getElementById("question").innerText = q.q;
+document.getElementById("feedback").innerHTML = "";
+
+let html = "";
+
+q.options.forEach((img, index) => {
+html += `<img src="${img}" onerror="this.src='${fallback}'" onclick="check(${index})">`;
+});
+
+document.getElementById("options").innerHTML = html;
+}
+
+function check(selected) {
+let correct = questions[current].correct;
+
+if(selected === correct) {
+document.getElementById("feedback").innerHTML = "👏";
+document.getElementById("clap").play();
+} else {
+document.getElementById("feedback").innerHTML = "❌";
+document.getElementById("wrong").play();
+}
+
+setTimeout(() => {
+current++;
+if(current < questions.length) {
+loadQuestion();
+} else {
+document.body.innerHTML = "<h1>🎉 Great Job! 🎉</h1>";
+}
+}, 1500);
+}
+
+loadQuestion();
+
+</script>
+
+</body>
+</html>
